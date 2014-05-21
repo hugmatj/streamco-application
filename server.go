@@ -5,7 +5,6 @@ import(
   "github.com/martini-contrib/render"
   "github.com/martini-contrib/binding"
 
-  "fmt"
 )
 
 type Show struct {
@@ -33,10 +32,7 @@ func err(r render.Render, message string) {
 
 func errorHandler(errors binding.Errors, r render.Render) {
   if errors.Len() > 0 {
-    e := errors[0]
-    message := fmt.Sprintf("%s: %s", e.Classification, e.Message)
-
-    err(r, message)
+    err(r, "Could not decode request")
   }
 }
 
