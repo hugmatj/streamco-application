@@ -1,0 +1,7 @@
+.vagrant/
+node_modules/
+
+web/log/
+
+*.swp
+**/*.swp
