@@ -5,12 +5,13 @@ import(
   "github.com/martini-contrib/render"
   "github.com/martini-contrib/binding"
 
+  "fmt"
 )
 
 type Show struct {
-  Image         interface{}  `json:"image"`
-  Slug          interface{}  `json:"slug"`
-  Title         interface{}  `json:"title"`
+  Image         string  `json:"image"`
+  Slug          string  `json:"slug"`
+  Title         string  `json:"title"`
   Drm           bool    `json:"drm"`
   EpisodeCount  int     `json:"episodeCount"`
 }
@@ -30,6 +31,15 @@ func err(r render.Render, message string) {
   r.JSON(400, map[string] string { "error": message })
 }
 
+func errorHandler(errors binding.Errors, r render.Render) {
+  if errors.Len() > 0 {
+    e := errors[0]
+    message := fmt.Sprintf("%s: %s", e.Classification, e.Message)
+
+    err(r, message)
+  }
+}
+
 func main() {
   m := martini.Classic()
 
@@ -38,7 +48,7 @@ func main() {
     IndentJSON: true, // Output human readable JSON
   }))
 
-  m.Post("/drm", binding.Bind(DrmParams{}), func(params DrmParams, r render.Render) {
+  m.Post("/drm", binding.Json(DrmParams{}), errorHandler, func(params DrmParams, r render.Render) {
     valid := make([]Show, 0)
 
     for _, show := range params.Payload {
