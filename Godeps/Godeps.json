@@ -1,0 +1,24 @@
+{
+	"ImportPath": "github.com/garethstokes/streamco-application",
+	"GoVersion": "go1.2.2",
+	"Deps": [
+		{
+			"ImportPath": "github.com/codegangsta/inject",
+			"Comment": "v1.0-rc1",
+			"Rev": "37d7f8432a3e684eef9b2edece76bdfa6ac85b39"
+		},
+		{
+			"ImportPath": "github.com/go-martini/martini",
+			"Comment": "v1.0",
+			"Rev": "49411a5b646861ad29a6ddd5351717a0a9c49b94"
+		},
+		{
+			"ImportPath": "github.com/martini-contrib/binding",
+			"Rev": "e20ce50c10d6e02d9db60e055c0600bb208b8653"
+		},
+		{
+			"ImportPath": "github.com/martini-contrib/render",
+			"Rev": "c8d058a00a82f27bfc8a49d62525b7c60efcf5b8"
+		}
+	]
+}
