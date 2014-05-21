@@ -1,2 +1,2 @@
-web: streamco-application
+server: streamco-application
 worker: worker
