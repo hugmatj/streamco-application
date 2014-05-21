@@ -8,11 +8,25 @@ import(
 )
 
 type Show struct {
-  Image         interface{}  `json:"image"`
+  Image         map[string] string  `json:"image"`
   Slug          string  `json:"slug"`
   Title         string  `json:"title"`
   Drm           bool    `json:"drm"`
   EpisodeCount  int     `json:"episodeCount"`
+}
+
+type DrmResponse struct {
+  Image   string  `json:"image"`
+  Slug    string  `json:"slug"`
+  Title   string  `json:"title"`
+}
+
+func newDrmResponseFrom(show * Show) DrmResponse {
+  return DrmResponse {
+    show.Image["showImage"],
+    show.Slug,
+    show.Title,
+  }
 }
 
 type DrmParams struct {
@@ -22,8 +36,8 @@ type DrmParams struct {
   TotalRecords  int       `json:"totalRecords"`
 }
 
-func ok(r render.Render, shows []Show) {
-  r.JSON(200, map[string] []Show { "response": shows })
+func ok(r render.Render, shows []DrmResponse) {
+  r.JSON(200, map[string] []DrmResponse { "response": shows })
 }
 
 func err(r render.Render, message string) {
@@ -49,11 +63,11 @@ func main() {
   //});
 
   m.Post("/", binding.Json(DrmParams{}), errorHandler, func(params DrmParams, r render.Render) {
-    valid := make([]Show, 0)
+    valid := make([]DrmResponse, 0)
 
     for _, show := range params.Payload {
       if show.Drm && show.EpisodeCount > 0 {
-        valid = append(valid, show)
+        valid = append(valid, newDrmResponseFrom(& show))
       }
     }
 
