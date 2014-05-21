@@ -1,0 +1,1 @@
+web: streamco-application
