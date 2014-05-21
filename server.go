@@ -10,8 +10,8 @@ import(
 
 type Show struct {
   Image         interface{}  `json:"image"`
-  Slug          interface{}  `json:"slug"`
-  Title         interface{}  `json:"title"`
+  Slug          string  `json:"slug"`
+  Title         string  `json:"title"`
   Drm           bool    `json:"drm"`
   EpisodeCount  int     `json:"episodeCount"`
 }
