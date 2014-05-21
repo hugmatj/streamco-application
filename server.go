@@ -48,11 +48,11 @@ func main() {
     IndentJSON: true, // Output human readable JSON
   }))
 
-  m.Get("/", func() string {
-    return "hello world"
-  });
+  //m.Get("/", func() string {
+  //  return "hello world"
+  //});
 
-  m.Post("/drm", binding.Json(DrmParams{}), errorHandler, func(params DrmParams, r render.Render) {
+  m.Post("/", binding.Json(DrmParams{}), errorHandler, func(params DrmParams, r render.Render) {
     valid := make([]Show, 0)
 
     for _, show := range params.Payload {
