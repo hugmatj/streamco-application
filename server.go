@@ -4,15 +4,14 @@ import(
   "github.com/go-martini/martini"
   "github.com/martini-contrib/render"
   "github.com/martini-contrib/binding"
-
 )
 
 type Show struct {
   Image         map[string] string  `json:"image"`
-  Slug          string  `json:"slug"`
-  Title         string  `json:"title"`
-  Drm           bool    `json:"drm"`
-  EpisodeCount  int     `json:"episodeCount"`
+  Slug          string              `json:"slug"`
+  Title         string              `json:"title"`
+  Drm           bool                `json:"drm"`
+  EpisodeCount  int                 `json:"episodeCount"`
 }
 
 type DrmResponse struct {
@@ -50,7 +49,19 @@ func errorHandler(errors binding.Errors, r render.Render) {
   }
 }
 
-func main() {
+func drmHandler(params DrmParams, r render.Render) {
+  valid := make([]DrmResponse, 0)
+
+  for _, show := range params.Payload {
+    if show.Drm && show.EpisodeCount > 0 {
+      valid = append(valid, newDrmResponseFrom(& show))
+    }
+  }
+
+  ok(r, valid)
+}
+
+func NewMartiniServer() * martini.ClassicMartini {
   m := martini.Classic()
 
   m.Use(render.Renderer(render.Options{
@@ -58,21 +69,11 @@ func main() {
     IndentJSON: true, // Output human readable JSON
   }))
 
-  //m.Get("/", func() string {
-  //  return "hello world"
-  //});
+  m.Post("/", binding.Json(DrmParams{}), errorHandler, drmHandler)
+  return m
+}
 
-  m.Post("/", binding.Json(DrmParams{}), errorHandler, func(params DrmParams, r render.Render) {
-    valid := make([]DrmResponse, 0)
-
-    for _, show := range params.Payload {
-      if show.Drm && show.EpisodeCount > 0 {
-        valid = append(valid, newDrmResponseFrom(& show))
-      }
-    }
-
-    ok(r, valid)
-  })
-
+func main() {
+  m := NewMartiniServer()
   m.Run()
 }
