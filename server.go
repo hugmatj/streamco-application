@@ -69,6 +69,7 @@ func NewMartiniServer() * martini.ClassicMartini {
     IndentJSON: true, // Output human readable JSON
   }))
 
+  m.Get("/hello", func() string { return "Hello world" })
   m.Post("/", binding.Json(DrmParams{}), errorHandler, drmHandler)
   return m
 }
